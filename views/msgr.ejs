@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messages</title>
+    <link rel="stylesheet" href="msgr.css">
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+
+<body>
+
+    <div id="fixedbar">
+        <span class="logo" style=" display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: transparent;
+        height: 100%;">
+            <h1 class="usernameL" data-user="<%=id%>"><img class="admin"
+                    style="width: 40px;height: 40px;margin-right: 12px;border-radius: 50%;object-fit: cover;padding: 0px;position: relative;margin-left: 10px;"
+                    src="/usersphoto/<%=typeof adminphoto !=='undefined'?id+'.'+adminphoto:'deflt.png' %>">
+                <p style="white-space: nowrap;">
+                    <%-username%>
+                </p>
+            </h1>
+            <span style="display: flex;
+            flex-direction: row-reverse; color: white;">
+                <p class="two" id="one">Sign Out</p>
+                <p class="two" id="two">Home</p>
+            </span>
+        </span>
+    </div>
+    <div class="container">
+        <div class="users">
+        </div>
+        <div class="messages">
+            <h1 class="title">Welcome to the chat application</h1>
+            <h6 class='subtitle'>Select A Chat To Start</h6>
+        </div>
+    </div>
+
+    <script data-type="get-users">
+        const True = 'true'
+        const False = 'false'
+        async function get_users_info(page) {
+            let user_info = await fetch('/get-msgr/?isUser=true&isMsg=false');
+            let json = await user_info.json();
+            let userid = '<%=id%>'
+
+            for (let user of json.info) {
+                if (!user.photoext) {
+                    $('.users').append(`
+                <div class="user" data-user="${user.id}" data-selected='${False}'>
+                    <span style="display:flex;">
+                        <img class="userphoto" src="/usersphoto/deflt.png">
+                        <p class='username'>${user.username}</p>
+                    </span>
+                    <p class="lastmsg">${user.lastmsg !== '' ? user.lastmsg : 'No Last Message'}</p>
+                </div>`);
+                } else {
+                    $('.users').append(`
+                <div class="user" data-user="${user.id}" data-selected='${False}'>
+                    <span style="display:flex;">
+                        <img class="userphoto" src="/usersphoto/${user.id}.${user.photoext}">
+                        <p class='username'>${user.username}</p>
+                    </span>
+                    <p class="lastmsg">${user.lastmsg !== '' ? user.lastmsg : 'No Last Message'}</p>
+                </div>`);
+                }
+                let finduser = user.seen.find(u => u.userid === userid) || {}
+                if (finduser.seen !== true) {
+
+                    $('.lastmsg').last().html(`<p class="lastmsg" style=' display: list-item;padding-left: 1px;'>${typeof user.lastmsg !== 'undefined' ? user.lastmsg : 'No Last Message'}</p>`)
+                }
+            }
+
+
+        }
+        get_users_info(1);
+    </script>
+
+    <script data-type="get_msg">
+        // importance
+        const socket = io();
+        // functions :
+        function Secure_append() {
+            $('.svg-line').click(function () {
+                $('.divmenu').css('display', 'none')
+                const getelement = $(this).closest('.in')[0]
+                const rect = getelement.getBoundingClientRect()
+                const offset_y = rect.top + 30
+                let contains_dev = `<div id='divmenu' class='divmenu' style='top:${offset_y}px' ><p class='edit' id='edit'>Edit</p><p class='del' id='del'>Delete</p></div>`
+                $(this).parent().append(contains_dev)
+                $('.divmenu')[0].focus()
+
+            })
+        }
+        $('#two').click(function () {
+            window.location.href = '/'
+        })
+        $(document).on('click', '#del', async function () {
+
+            let objID = $('.sendico').data('id')
+            let index = $(this).closest('[data-type=msg]').data('index')
+            await fetch('/get-msgr', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ objID: objID, index: index, delete: true }) })
+            $(this).closest('[data-type=msg]').remove()
+            socket.emit('message-send', { del: true, Index: index, getID: $('[data-selected=true]').data('user') })
+            let lasttextupdate;
+            try {
+                lasttextupdate = $('[data-type=msg]')[$('[data-type=msg]').length - 1].innerText
+            } catch {
+                lasttextupdate = 'No Last Message'
+            }
+            $('.state').remove()
+            $(`[data-selected=${True}]`).find('.lastmsg').text(lasttextupdate)
+            $('.state').remove()
+        })
+        $(document).on('click', '#edit', function () {
+            const text = $(this).closest('.in').find('#get').html().replaceAll('\n', '<br>')
+            const index = $(this).closest('.in').data('index')
+            const dataI = $('.sendico').data('id')
+
+
+            $('body').append(`<div class='full' ><div class="editWindow"><p class="in">${text}</p><div class="text-edit"><textarea class='chatedit'></textarea><img src='/send.png' class='editico' data-index='${index}' data-id=${dataI}></div></div></div>`)
+            $('.chatedit').focus()
+            $('.chatedit')[0].innerHTML = text.replaceAll('<br>', '\n')
+        })
+        $(document).on('click', '.editico', async function () {
+            console.log(true);
+            const textEdit = $('.chatedit').val()
+            const Index = $(this).data('index')
+            const dataI = $(this).data('id')
+            socket.emit('message-send', { edit: true, Index: Index, text: textEdit, getID: $('[data-selected=true]').data('user') })
+            await fetch('/get-msgr', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ textEdit: textEdit, Index: Index, editmsg: true, id: dataI }) })
+            $('.full').remove()
+            $(`[data-index='${Index}']`).find('p').text(textEdit)
+            $(`[data-selected=true]`).find('.lastmsg').text(textEdit)
+
+        })
+
+
+        $(document).on('click', function (event) {
+            const imgMenu = $('.svg-line').toArray()
+            const full = $('.full').toArray()
+            const thisEDIT = $('#edit')[0]
+            const menu = $('.divmenu').toArray()
+            if (!imgMenu.includes(event.target) && !menu.includes(event.target)) {
+                $('.divmenu').css('display', 'none')
+            }
+            if (full.includes(event.target) && thisEDIT !== event.target) {
+                $('.full').remove()
+            }
+        })
+        window.addEventListener('resize', function () {
+
+            if (window.innerWidth >= 800) {
+
+                $('.users').css('display', 'flex')
+                $('.messages').css('display', 'flex')
+            } else {
+                $('.users').css('display', 'flex')
+                $('.messages').css('display', 'none')
+            }
+        })
+        $(document).on('click', '.user', async function () {
+            let getID = $(this).data('user')
+            let response = await fetch(`/get-msgr/?isUser=false&isMsg=true&userid=<%=id%>&getID=${getID}`);
+            if (window.innerWidth <= 800) {
+                $('.users').css('display', 'none')
+                $('.messages').css('display', 'flex')
+
+            }
+            let json = await response.json();
+
+            $('.user').attr('data-selected', `${False}`)
+            $(this).attr('data-selected', True)
+            socket.emit('seen', { userid: $(`[data-selected=${True}]`).data('user') })
+            $('.messages').empty();
+            if (json.photoext) {
+                $('.messages').append(`<div class='top'><div class='userbar'><img src='/usersphoto/${$(this).data('user')}.${json.photoext}'><p class='userna'>${json.username}</p><img class='back-phone' src='./back.png'></div></div><div class="thebig"></div><div class="textareasend"><textarea class='chat' placeholder='Send Something' data-id='${$(this).data('user')}'></textarea><img src='/send.png' class='sendico' data-id=${json.id}></div>`);
+
+            } else {
+                $('.messages').append(`<div class='top'><div class='userbar'><img src='/usersphoto/deflt.png'><p class='userna'>${json.username}</p><img class='back-phone' src='./back.png'></div></div><div class="thebig"></div><div class="textareasend"><textarea class='chat' placeholder='Send Something' data-id='${$(this).data('user')}'></textarea><img src='/send.png' class='sendico' data-id=${json.id}></div>`);
+
+            }
+            let userid = '<%-id%>';
+            for (let msg of json.message) {
+                if (msg.userid == userid) {
+                    $('.thebig').append(`<span class='in' data-type='msg' data-index='${msg.index}'><svg viewBox="0 0 18 18" height="18" width="18" preserveAspectRatio="xMidYMid meet" class="svg-line" version="1.1" x="0px" y="0px" enable-background="new 0 0 18 18"><title>Options</title><path fill="currentColor" d="M3.3,4.6L9,10.3l5.7-5.7l1.6,1.6L9,13.4L1.7,6.2L3.3,4.6z"></path></svg><p style='padding:0;margin:0;font-family:sans-serif;' id='get'>${msg.text.replaceAll('\n', '<br>')}</p></span>`);
+                } else {
+                    $('.thebig').append(`<span class='out' data-type='msg' data-index='${msg.index}'><p style='padding:0;margin:0;font-family:sans-serif;'>${msg.text.replaceAll('\n', '<br>')}</p></span>`);
+                }
+            }
+            Secure_append()
+            let objID = $('.sendico').data('id')
+
+
+
+            $(this).find('.lastmsg').css('display', 'block')
+            let userfind = json.seen.find(u => u.userid === getID)
+
+            if (userfind.seen === true && $('[data-type=msg]').last().attr('class') == 'in') {
+                $('.thebig').append('<p class="state">SEEN</P>')
+            } else if (userfind.seen === false && $('[data-type=msg]').last().attr('class') == 'in') {
+                $('.thebig').append('<p class="state">SENT</P>')
+            }
+            $('.thebig')[0].scrollTop = $('.thebig')[0].scrollHeight;
+            await fetch('/get-msgr', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ objID: objID, seenUser: userid, makeSeenTrue: true }) });
+
+        });
+
+        $(document).on('click', '.sendico', async function () {
+            let userid = '<%-id%>';
+            let objID = $(this).data('id');
+            let text = $(this).parent().find('.chat').val();
+            $('[data-selected=true]').find('.lastmsg').text(text)
+            let userget = $(`[data-selected=${True}]`).data('user')
+
+            let lastindexmsg = Date.now().toString(36) + Math.random(36).toString(36)
+
+            socket.emit('message-send', { text: text, userid: userid, index: lastindexmsg, getID: userget, msg: true }); // إرسال الرسالة الفعلية هنا
+            $(this).parent().find('.chat').val(''); // تنظيف حقل الإدخال بعد الإرسال
+            await fetch('/get-msgr', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ msg: true, userget: userget, userid: userid, objID: objID, text: text, index: lastindexmsg }) });
+        });
+        $(document).on('click', '.back-phone', function () {
+            $('.messages').css('display', 'none')
+            $('.users').css('display', 'flex')
+
+
+        })
+        socket.on('connect', function () {
+            console.log(socket.id)
+        })
+        socket.on('message-send', async function (msg) {
+            if (msg.msg == true) {
+                let userid = '<%-id%>';
+
+                let objID = $('.sendico').data('id')
+                if ($(`[data-selected=${True}]`).data('user') == msg.getID || msg.getID == '<%-id%>' && $(`[data-selected=${True}]`).data('user') == msg.userid) {
+                    if (msg.userid == userid) {
+                        $('.thebig').append(`<span class='in' data-type='msg' data-index='${msg.index}'><svg viewBox="0 0 18 18" height="18" width="18" preserveAspectRatio="xMidYMid meet" class="svg-line" version="1.1" x="0px" y="0px" enable-background="new 0 0 18 18"><title>Options</title><path fill="currentColor" d="M3.3,4.6L9,10.3l5.7-5.7l1.6,1.6L9,13.4L1.7,6.2L3.3,4.6z"></path></svg><p style='padding:0;margin:0;font-family:sans-serif;' id='get'>${msg.text.replaceAll('\n', '<br>')}</p></span>`);
+                    } else {
+                        $('.thebig').append(`<span class='out' data-type='msg' data-index='${msg.index}'><p style='padding:0;margin:0;font-family:sans-serif;'>${msg.text.replaceAll('\n', '<br>')}</p></span>`);
+                    }
+                }
+                if ($('[data-type=msg]').last().attr('class') == 'in') {
+                    $('.state').remove()
+                    $('.thebig').append('<p class="state">SENT</P>')
+                } else if ($('[data-type=msg]').last().attr('class') == 'out') {
+                    $('.state').remove()
+                }
+                $(`[data-user=${msg.userid}]`).find('.lastmsg').text(msg.text)
+                $(`[data-user=${msg.userid}]`).find('.lastmsg').css('display', 'list-item')
+                $(`[data-user=${msg.userid}]`).find('.lastmsg').css('padding-left', '1px')
+                $(`[data-user=${msg.userid}]`).find('.lastmsg').css('margin-left', '64px')
+
+                $('.thebig')[0].scrollTop = $('.thebig')[0].scrollHeight;
+                Secure_append()
+                window.addEventListener('focus', async function () {
+                    let useridSelected = $('.chat').data('id')
+                    let dataSelected = $(`[data-selected=${True}]`).data('user')
+
+                    if (dataSelected === useridSelected) {
+
+                        await fetch('/get-msgr', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ objID: objID, seenUser: userid, makeSeenTrue: true }) });
+                        socket.emit('seen', { userid: $(`[data-selected=${True}]`).data('user') })
+                        $(`[data-selected=${True}]`).find('.lastmsg').css('display', 'block')
+                    }
+
+                })
+            } else if (msg.del == true) {
+                console.log(msg.Index)
+                $(`[data-index='${msg.Index}']`).remove()
+
+                try {
+                    let lasttextupdate = $('[data-type=msg]')[$('[data-type=msg]').length - 1].innerText
+                } catch {
+                    lasttextupdate = 'No Last Message'
+                    
+                }
+
+                $(`.user, [data-user='${msg.getID}']`).find('.lastmsg').text(lasttextupdate)
+                
+            } else if (msg.edit == true) {
+                $(`[data-index='${msg.Index}']`).find('p').text(msg.text)
+                $(`.user, [data-user='${msg.getID}']`).find('.lastmsg').text(msg.text)
+
+
+            }
+        })
+        socket.on('seen', function (userid) {
+            if (userid.userid == '<%=id%>') {
+
+                $('.state').text('SEEN')
+                if ($('[data-type=msg]').last().attr('class') == 'out') {
+                    $('.state').remove()
+                }
+            }
+        })
+        $('#one').on('click', async function () {
+            await fetch('/get-msgr', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ signout: true }) })
+            location.reload()
+        })
+    </script>
+</body>
+
+</html>

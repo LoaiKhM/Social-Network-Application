@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search about : <%=searchitem%></title>
+    <link rel="stylesheet" href="./search.css">
+</head>
+<body>
+    <div class="container" id="container">
+        <% findalldata.forEach(function(post) { %>
+            <div class="post" data-id="<%= post._id %>">
+                <% if (post.username===username) { %>
+                    <span class="cont">
+                        <p class="username">
+                            <%= post.username %>
+
+
+
+                        </p>
+                        <span>
+                            <img src="./del.ico" class="del" id="del">
+                            <img src="./edit.ico" class="edit" id="edit">
+                        </span>
+                    </span>
+                    <% } else { %>
+                        <p class="username">
+                            <%= post.username %>
+                        </p>
+                        <% } %>
+                            <p class="posttext">
+                                <%- post.post.replaceAll('\n', '<br>' ) %>
+                            </p>
+
+                            <p class="likes">
+                                <%= post.likes %> <img src="./like.ico" class="like">
+                            </p>
+            </div>
+            <% }) %>
+    </div>
+</body>
+</html>

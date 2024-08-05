@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post : </title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="/posts.css">
+</head>
+
+<body>
+    <span class="logo">
+        <div id="fixedbar" style="    margin-top: 0;
+        padding-left: 10px;
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        border-radius: 4px;
+        height: 60px;">
+            <div class="fixedit">
+                <a href='/user/<%=userid%>' style="    text-decoration: none;
+                color: black;
+                font-family: sans-serif;
+                width: min-content;
+                text-wrap: nowrap;" class="username" data-user="<%=userid%>"><img class="admin"
+                        style="width: 40px;height: 40px;margin-right: 12px;border-radius: 50%;object-fit: cover;padding: 0px;position: relative;/* top: 10px; */"
+                        src="/usersphoto/<%=typeof adminphoto !=='undefined'?userid+'.'+adminphoto:'deflt.png' %>">
+                    <p>
+                        <%-username%>
+                    </p>
+                </a>
+            </div>
+    </span>
+    <div class="container" id="container">
+
+        <div class="post" data-id="<%= post._id %>">
+            <% if (post.userid===userid) { %>
+                <span class="cont">
+                    <p class="username" data-user="<%=post.userid%>"><img class="userico"
+                            style="height: 44px;margin-right: 12px;border-radius: 50%;"
+                            src="/usersphoto/<%= ext !== null? userid + '.' + ext : 'deflt.png' %> ">
+                        <%= post.username %>(You)
+                    </p>
+
+                </span>
+                <% } else { %>
+                    <span class="adduseranduser">
+                        <p class="username" data-user="<%=post.userid%>"><img class="userico"
+                                style="height: 44px;margin-right: 12px;"
+                                src="/usersphoto/<%= ext !== null? post.userid + '.' + ext : 'deflt.png' %> ">
+                            <%= post.username %>
+
+
+
+                                <%if(pending.indexOf(post.userid)>= 0){%>
+                                    <p class="acc" id="rejacc" style="    position: relative;
+                                            top: 28px;">Accept</p>
+                                    <p class="rej" id="rejacc" style='    position: relative;
+                                            top: 28px;'>Reject</p>
+                                    <%}else if(friends.indexOf(post.userid)>= 0){%>
+                                        <p class="adduser" style="cursor: text; text-decoration: none;">Friends</p>
+
+                                        <%}else if(addedpending.indexOf(post.userid)>= 0){%>
+                                            <p class='adduser' style="cursor: pointer;">Sent Request</p>
+                                            <%}else{%>
+                                                <p class='adduser' style="cursor: pointer;">Add Friend</p>
+                                                <%}%>
+
+
+                        </p>
+                    </span>
+                    <% } %>
+                        <p class="posttext">
+                            <%- post.post.replaceAll('\n', '<br>' ) %>
+                        </p>
+                        <%if(post.photos){%>
+                            <div class='contphoto'>
+                                <%post.photos.forEach(function(value){%>
+                                    <%if(['mp4','mkv','ogg','webm'].includes(value.split('.').pop())){%>
+
+                                        <video width=400 controls>
+                                            <source src="/posts/<%-value%>" class="imgposts" id="imga">
+                                        </video>
+                                        <%}else{%>
+                                            <img src="/posts/<%-value%>" class="imgposts" id="imga"></img>
+                                            <%}%>
+                                                <%})%>
+                            </div>
+                            <%}%>
+                                <hr>
+                                <span class="likes">
+                                    <p class="likec">
+                                        <%= post.likes %>
+
+
+                                            <%if(typeof post.wholike !=='undefined' ? post.wholike.indexOf(userid)>=
+                                                0:false){%>
+                                                <img src="/likepressed.ico" class="like">
+                                                <%}else{%>
+                                                    <img src="/like.ico" class="like">
+                                                    <%}%>
+                                    </p>
+                                    <p class="commer">
+                                        <%=post.commentscount%><img src="/comment.ico" id="redire" class="commentor"
+                                                style="    height: 26px;
+                                    margin-left: 16px;">
+                                    </p>
+                                </span>
+        </div>
+
+
+    </div>
+    <div class="comments" style="    position: relative;
+        top: 100px;
+        display: flex;
+        align-items: center;flex-direction: column;">
+        <p class="label" style="    font-size: 25px;
+        font-family: sans-serif;
+        letter-spacing: 5px;">Comments</p>
+        <span class='span-textarea-button' style="display: flex;
+        flex-direction: row;
+        justify-content: center;
+        width: 100%;">
+            <textarea style="    resize: none;
+            outline: 0;
+            border: 1px solid rgba(0, 0, 0, 0.4);
+            width: 33%;
+            border-radius: 1rem;
+            padding-top: 20px;
+            padding-left: 10px;
+            font-size: 16px;
+            font-family: sans-serif;" placeholder="Enter Your Comment Here !" id="commentarea"></textarea>
+            <button class="button-comment" style="    border: 0;
+            padding: 10px 10px;
+            height: 40px;
+            border-radius: 10px;
+            background: black;
+            color: white;
+            position: relative;
+            align-self: center;
+            margin-left: 14px;" id="commentsubmit">Comment</button>
+        </span>
+        <div class="commentspan">
+            <%if(post.comment){%>
+                <%post.comment.forEach(function(value){%>
+                    <div class="comment" style="    width: min-content;
+                    padding: 10px 10px;
+                    box-sizing: content-box;
+                    box-shadow: 0px 0px 2px;
+                    margin-top: 12px;
+                    height: min-content;
+                    text-wrap: nowrap;">
+                        <p class="username" style="    font-family: sans-serif;
+                        margin: 0;"><img style="    height: 24px;
+                            border-radius: 50%;
+                            font-size: 12px;
+                            margin: 0;
+                            margin-right: 10px;"
+                                src="/usersphoto/<%= typeof value.photoext !=='undefined' ? value.userid + '.' + value.photoext : 'deflt.png'%>">
+                            <%=value.username%>
+                        </p>
+                        <p style="font-family: sans-serif;
+                    font-size: 20px;
+    margin: 0;">
+                            <%=value.comment%>
+                        </p>
+                    </div>
+                    <%})%>
+                        <%}%>
+        </div>
+    </div>
+
+
+</body>
+<script>
+    $('#commentsubmit').on('click', async function () {
+        let value = $('#commentarea').val().trim()
+        let location = window.location.href
+        await fetch(location, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ comment: value }) })
+    })
+
+
+</script>
+
+</html>

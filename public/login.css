@@ -1,0 +1,103 @@
+body,html{
+    height: 100%;
+    padding: 0;
+    margin: 0;
+
+}
+html{
+    background-image: url(./sp.jpg);
+    background-size: cover;
+}
+
+
+h1{
+    font-family: sans-serif;
+    padding: 0;
+    margin: 0;
+}
+h1{
+    font-size: 26px;
+    position: relative;
+    top: 15px;
+}
+.userlogin{
+    height: 95px;
+    position: relative;
+    top: 30px;
+}
+#centered{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100%;
+}
+#container{
+    display: flex;
+    width: 400px;
+    height: 380px;
+    flex-direction: column;
+    align-items: center;
+    box-shadow:black 1px 0px 5px;
+    border-radius: 10px;
+}
+form{
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    top: 30px;
+}
+.email,.password{
+    border: 0;
+    font-family: sans-serif;
+    padding-left: 34px;
+    letter-spacing: 1px;
+    border-bottom: 1px solid black;
+    width: 340px;
+    height: 33px;
+    outline: none;
+    margin-top: 10px;
+    background-color: transparent !important;
+}
+.email{
+    background: url(./email.ico) 8px 7px no-repeat;
+    background-size: 20px;
+}
+.password{
+    background: url(./lockuser.ico) 8px 7px no-repeat;
+    background-size: 20px;
+    position: relative;
+    top: 12px;
+}
+.submit{
+    width: 100px;
+    height: 40px;
+    margin-top: 10px;
+    align-self: center;
+    border: 0;
+    background-color: black;
+    color: white;
+    letter-spacing: 4px;
+    cursor: pointer;
+    border-radius: 5px;
+    position: relative;
+    top: 50px;
+    font-family: sans-serif;
+}
+a{
+    font-family: sans-serif;
+    font-size: 15px;
+    text-decoration: none;
+    color: white;
+    margin-top: 20px;
+    font-weight: bolder;
+}
+a:hover{
+    text-decoration: underline;
+}
+
+@media screen and (max-width:500px) {
+    .centered{
+        scale: .8;
+    }
+}

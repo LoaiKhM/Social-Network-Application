@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!--  -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="index.css">
+    <title>Social App - Home Page</title>
+</head>
+
+<body>
+    <div id='do' class="action" style="display: none;justify-content: center;
+    align-items: center;">
+        <form method="post">
+            <span class="span">
+                <div class="menu" id="menu"><textarea type="text" name="post" placeholder="Add something new .."
+                        class="postinp" id="poster"></textarea><input type="file"
+                        accept=".jpg ,.png,.webp ,.jpeg,.mp4,.mkv,.webp,.ogg" style="display: none;" id="postphoto"
+                        multiple><span class="tbtn"><input type="button" id="addphoto"
+                            onclick="document.getElementById('postphoto').click()" value="Share a media file" style="    
+    border: none;
+    height: 40px;
+    padding: 0 18px;
+    color: white;
+    cursor: pointer;
+    font-size: 20px;
+    width: 96%;
+    margin: 0;
+    border-radius: 10px;
+    background-color: #0866ff;
+    margin-bottom: 10px;"><input type="button" class="submit" value="Share The Post"></span></div>
+            </span>
+            <div class="preview" style='    
+                position: relative;
+                top: 40px;
+                height: 100px;
+                width: 50%;'></div>
+
+        </form>
+    </div>
+    <div id="fixedbar">
+
+        <span class="logo">
+            <h1 class="username" data-user="<%=userid%>"><img class="admin"
+                    style="width: 40px;height: 40px;margin-right: 12px;border-radius: 50%;object-fit: cover;padding: 0px;position: relative;/* top: 10px; */"
+                    src="/usersphoto/<%=typeof adminphoto !=='undefined'?userid+'.'+adminphoto:'deflt.png' %>">
+                <p>
+                    <%-username%>
+                </p>
+            </h1>
+        </span>
+        <span class="therst">
+            <img class='addfriend' src="/message.svg" id='open-msg'>
+            <img class='addfriend' src="/adduser.ico" id='addfriend'>
+
+
+            <div class="fixeduser" id="fixeduser">
+
+            </div>
+            <input type="text" placeholder="Search for users or posts ...." class="search"><input type="submit"
+                value="Search" class="searchbtn" id="searchbtn">
+
+            <div class="fixedmenu" id="fixedmenu">
+                <div class="container2" id="container"></div>
+            </div>
+        </span>
+    </div>
+    <div class="asc" style="    position: relative;
+    margin-bottom: 20vh;
+    top: 10vh;
+    display: flex;
+    justify-content: center;">
+        <div class="bg-white">
+            <button class="showpostinp" id="showpostinp" style="border: 0;
+        outline: 0;
+        height: 50px;
+        width: 100%;
+        border-radius: 1rem;
+        font-size: 18px;
+        text-align: left;
+        padding-left: 14px;
+        cursor: pointer;
+        color: rgba(0, 0, 0, 0.4);" onclick="document.getElementById('do').style.display='flex'">What are You Think
+                About <%-username.split(' ').shift() %></button>
+        <img class="admin"
+        style="width: 40px;height: 40px;margin-right: 12px;border-radius: 50%;object-fit: cover;padding: 0px;position: relative;/* top: 10px; */"
+        src="/usersphoto/<%=typeof adminphoto !== 'undefined'?userid+'.'+adminphoto:'deflt.png' %>">
+        </div>
+
+    </div>
+
+    <div class="container" id="container"></div>
+
+</body>
+
+
+
+
+
+
+<script data-comment="auto-pagination-side">
+    let isLoading = false;
+    let x = 2;
+    function get(parms) {
+        if (isLoading) return; // If a request is already in progress, do nothing
+        isLoading = true; // Set the flag to indicate a request is in progress
+
+        fetch(`/get-posts/?page=${parms || 1}`, {
+            method: 'get',
+            headers: { 'Content-Type': 'application/json' }
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(function (resp) {
+
+
+                let userid = resp.userid;
+                let pending = resp.pending;
+                let addedpending = resp.addedpending;
+                let friends = resp.friends;
+                let container = document.querySelector('.container');
+
+                resp.findalldata.forEach(function (post) {
+                    const postDiv = document.createElement('div');
+                    postDiv.className = 'post';
+                    postDiv.setAttribute('data-id', post._id);
+
+                    if (post.userid === userid) {
+                        const spanCont = document.createElement('span');
+                        spanCont.className = 'cont';
+
+                        const pUsername = document.createElement('p');
+                        pUsername.className = 'username';
+                        pUsername.setAttribute('data-user', post.userid);
+
+                        const imgUserico = document.createElement('img');
+                        imgUserico.className = 'userico';
+
+                        imgUserico.style.height = '18px';
+                        imgUserico.style.marginRight = '12px';
+
+                        pUsername.appendChild(imgUserico);
+                        
+                        pUsername.innerHTML += `<span class='usern'>${post.username}(You)</span>`;
+                        const span = document.createElement('span');
+
+                        const imgDel = document.createElement('img');
+                        imgDel.src = '/del.ico';
+                        imgDel.className = 'del';
+                        imgDel.id = 'del';
+
+                        const imgEdit = document.createElement('img');
+                        imgEdit.src = '/edit.ico';
+                        imgEdit.className = 'edit';
+                        imgEdit.id = 'edit';
+
+                        span.appendChild(imgDel);
+                        span.appendChild(imgEdit);
+
+                        spanCont.appendChild(pUsername);
+                        spanCont.appendChild(span);
+
+                        postDiv.appendChild(spanCont);
+                    } else {
+                        const spanAddUserAndUser = document.createElement('span');
+                        spanAddUserAndUser.className = 'adduseranduser';
+
+                        const pUsername = document.createElement('p');
+                        pUsername.className = 'username';
+                        pUsername.setAttribute('data-user', post.userid);
+                        
+
+                        const imgUserico = document.createElement('img');
+                        imgUserico.className = 'userico';
+
+                        imgUserico.style.height = '18px';
+                        imgUserico.style.marginRight = '12px';
+
+                        pUsername.appendChild(imgUserico);
+                        pUsername.innerHTML += `<span class='usern'>${post.username}</span>`;
+                        
+                        if (pending.indexOf(post.userid) >= 0) {
+                            const pAcc = document.createElement('p');
+                            pAcc.className = 'acc';
+                            pAcc.id = 'rejacc';
+                            pAcc.style.position = 'relative';
+                            pAcc.style.top = '-5px';
+                            pAcc.innerText = 'Accept';
+                            pAcc.style.fontSize = '14px'
+
+                            const pRej = document.createElement('p');
+                            pRej.className = 'rej';
+                            pRej.id = 'rejacc';
+                            pRej.style.position = 'relative';
+                            pRej.style.top = '-5px';
+                            pRej.style.fontSize = '14px'
+                            pRej.innerText = 'Reject';
+
+                            pUsername.appendChild(pAcc);
+                            pUsername.appendChild(pRej);
+                        } else if (friends.indexOf(post.userid) >= 0) {
+                            const pFriends = document.createElement('p');
+                            pFriends.className = 'adduser';
+                            pFriends.style.cursor = 'text';
+                            pFriends.style.textDecoration = 'none';
+                            pFriends.innerText = 'Friends';
+
+                            pUsername.appendChild(pFriends);
+                        } else if (addedpending.indexOf(post.userid) >= 0) {
+                            const pSentRequest = document.createElement('p');
+                            pSentRequest.className = 'adduser';
+                            pSentRequest.style.cursor = 'pointer';
+                            pSentRequest.innerText = 'Sent Request';
+
+                            pUsername.appendChild(pSentRequest);
+                        } else {
+                            const pAddFriend = document.createElement('p');
+                            pAddFriend.className = 'adduser';
+                            pAddFriend.style.cursor = 'pointer';
+                            pAddFriend.innerText = 'Add Friend';
+
+                            pUsername.appendChild(pAddFriend);
+                        }
+
+                        spanAddUserAndUser.appendChild(pUsername);
+                        
+                        postDiv.appendChild(spanAddUserAndUser);
+                    }
+
+                    const pPostText = document.createElement('p');
+                    pPostText.className = 'posttext';
+                    pPostText.innerHTML = post.post.replace(/\n/g, '<br>');
+                    postDiv.appendChild(pPostText);
+                    
+                    if (post.photos) {
+                        const contPhoto = document.createElement('div');
+                        contPhoto.className = 'contphoto';
+
+                        post.photos.forEach(function (value) {
+                            if (['mp4', 'mkv', 'ogg', 'webm'].includes(value.split('.').pop())) {
+                                const video = document.createElement('video');
+                                video.width = 400;
+                                video.controls = true;
+
+                                const source = document.createElement('source');
+                                source.src = `/posts/${value}`;
+                                source.className = 'imgposts';
+                                source.id = 'imga';
+
+                                video.appendChild(source);
+                                postDiv.appendChild(video);
+                            } else {
+                                const img = document.createElement('img');
+                                img.src = `/posts/${value}`;
+                                img.className = 'imgposts';
+                                img.id = 'imga';
+
+                                contPhoto.appendChild(img);
+                            }
+                        });
+
+                        postDiv.appendChild(contPhoto);
+                    }
+
+                    const hrElement = document.createElement('hr');
+                    postDiv.appendChild(hrElement);
+
+                    const pLikes = document.createElement('span');
+                    pLikes.className = 'likes';
+
+                    const likec = document.createElement('p');
+                    likec.innerText = post.likes;
+                    likec.className = 'likec';
+
+                    const imgLike = document.createElement('img');
+                    if (typeof post.wholike !== 'undefined' && post.wholike.indexOf(userid) >= 0) {
+                        imgLike.src = '/likepressed.ico';
+                    } else {
+                        imgLike.src = '/like.ico';
+                    }
+                    imgLike.className = 'like';
+                    likec.appendChild(imgLike);
+                    pLikes.appendChild(likec);
+
+                    const commentEl = document.createElement('p');
+                    commentEl.innerText = post.commentscount;
+                    commentEl.className = 'commer';
+
+                    const commentImg = document.createElement('img');
+                    commentImg.src = '/comment.ico';
+                    commentImg.id = 'redire';
+                    commentImg.className = 'commentor';
+                    commentEl.appendChild(commentImg);
+
+                    pLikes.appendChild(commentEl);
+                    postDiv.appendChild(pLikes);
+
+                    container.appendChild(postDiv);
+                    $('.usern')[$('.usern').length - 1].innerHTML += `<p class='date'>${post.date}</p>`
+                    
+                });
+
+
+                resp.allphotos.forEach(value => {
+                    const userIcon = document.querySelector(`.post [data-user='${value.id}'] .userico`);
+                    $('.post').find('[data-user=' + value.id + ']').each(function () {
+
+                        if (typeof value.photoext === 'undefined') {
+
+
+
+                            $(this).find('.userico').attr('src', `/usersphoto/deflt.png`);
+
+
+                        } else {
+
+
+                            $(this).find('.userico').attr('src', `/usersphoto/${value.id}.${value.photoext}`);
+
+                        }
+                        $(this).find('.userico').addClass('edit')
+
+                    })
+                });
+
+                isLoading = false; // Reset the flag once the request is complete
+
+                if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 600 && !isLoading) {
+
+                    get(x);
+                    x++;
+                }
+
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                isLoading = false; // Reset the flag if an error occurs
+            });
+
+        return 'DoneApp';
+    }
+
+    get();
+
+
+    window.addEventListener('scroll', function () {
+        if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 600 && !isLoading) {
+            get(x);
+            x++;
+        }
+    });
+</script>
+
+<script>
+    $(document).on('click', '.commentor', async function () {
+        let containsdev = $(this).closest('.post').data('id')
+        let response = await fetch(`/post/${containsdev}`)
+        let json = await response.json()
+
+
+
+        let html = `
+<div class="fixedcomments">
+    <span style='    display: flex;
+    flex-direction: column;
+    height: auto;
+    overflow-y: auto;
+    background-color: white;' class='samain'>
+        <div class="maincontainer" id='maincont'>
+       
+
+        </div>
+        <span class='span-textarea-button' style="    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-bottom: 10px;
+    position: relative;
+    right: 5px;">
+            <textarea style="    resize: none;
+    outline: 0;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    width: 86%;
+    border-radius: 1rem;
+    padding-top: 10px;
+    padding-left: 10px;
+    font-size: 16px;
+    font-family: sans-serif;
+    height: 56px;" placeholder="Enter Your Comment Here !" id="commentarea"></textarea>
+            <img class="button-comment" style="    border: 0;
+    height: 33px;
+    border-radius: 10px;
+    background: white;
+    position: relative;
+    align-self: center;
+    cursor: pointer;
+    position: relative;
+    top: 4px;
+    left: 6px;" id="commentsubmit" src='/send.png'>
+    </span> 
+    </span>
+
+</div>
+`
+        $('body').append(html)
+        $('#commentsubmit').attr('data-id', containsdev)
+
+
+        if (json.post.comments) {
+
+
+
+            for (let comment of json.post.comments) {
+
+
+                if (comment.photoext) {
+                    $('.maincontainer')[0].innerHTML += ` <div id='commen'><span class="comment"><span class="conts"><p class="usernameA">${comment.username}<img class='imgphotocomment' src="/usersphoto/${comment.userid}.${comment.photoext}"></p><p class="commenttext">${comment.comment}</p></span><img src="/like.ico" style="height: 20px; cursor: pointer;" class='likecomment'></span><span class="infoscomment"><p>4h</p><p id='needi'>${comment.likes} Likes</p></span></div>`
+
+                    $('.likecomment')[$('.likecomment').length - 1].setAttribute('data-index', comment.id)
+                    $('.likecomment')[$('.likecomment').length - 1].setAttribute('data-id', containsdev)
+                } else {
+                    $('.maincontainer')[$('.likecomment').length - 1].innerHTML += ` <div id='commen'><span class="comment"><span class="conts"><p class="usernameA">${comment.username}<img class='imgphotocomment' src="/usersphoto/deflt.png"></p><p class="commenttext">${comment.comment}</p></span><img src="/like.ico" style="height: 20px; cursor: pointer;" class='likecomment'></span><span class="infoscomment"><p>4h</p><p id='needi'>${comment.likes} Likes</p></span></div>`
+                    $('.likecomment').attr('data-index', comment.id)
+                    $('.likecomment').attr('data-id', containsdev)
+                }
+
+            }
+        } if (json.post.comments.length == 0) {
+            $('.maincontainer')[0].innerHTML = '<p id="c_h" style="letter-spacing:2px;position:relative;top:50%;left:22%;font-family:sans-serif;">No Comments Here</p>'
+        }
+    })
+    $(document).on('click', '#commentsubmit', async function (event) {
+        // this function not works why ?
+        event.preventDefault()
+
+        let value = $('#commentarea').val().trim()
+        const postid = `/post/${$(this).data('id')}`
+        try {
+            $(this).closest('.samain').find('#c_h').remove()
+        } catch (error) {
+            console.log(error)
+        }
+
+        $('#commentarea').empty()
+        let response = await fetch(postid, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ comment: value }) })
+        let json = await response.json()
+        $('.maincontainer')[0].innerHTML += ` <div id='commen'><span class="comment"><span class="conts"><p class="usernameA"><%=username%><img class='imgphotocomment' src="/usersphoto/<%=typeof adminphoto !=='undefined'?userid+'.'+adminphoto:'deflt.png' %>"></p><p class="commenttext">${value}</p></span><img src="/like.ico" style="height: 20px; cursor: pointer;" class='likecomment' data-index='${json.info}' data-id='${$(this).data('id')}'></span><span class="infoscomment"><p>Now</p><p id='needi'>0 Likes</p></span></div>`
+
+    })
+    $('#open-msg').click(function () {
+        let userid = '<%-userid%>'
+        window.location.href = `/msgr`
+    })
+    $(document).on('click', '.likecomment', async function () {
+
+        let containsdev = $(this).data('id')
+
+        const index = $(this).data('index')
+
+
+        let userid = '<%-userid%>'
+
+        let responseget = await fetch(`/post/${containsdev}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ addlike: true, userid: userid, commentID: index }) })
+        let json = await responseget.json()
+
+        if (json.addlike) {
+            let num = parseInt($(this).closest('#commen').find('#needi')[0].innerText.split(' ').shift())
+
+            $(this).closest('#commen').find('#needi')[0].innerText = `${num + 1} Likes`
+        } else {
+            let num = parseInt($(this).closest('#commen').find('#needi')[0].innerText.split(' ').shift())
+            $(this).closest('#commen').find('#needi')[0].innerText = `${num - 1} Likes`
+        }
+
+    })
+
+
+    $(document).on('click', '.imgposts', function (event) {
+        event.stopPropagation()
+        event.preventDefault()
+        let html = $('html')
+        let src = $(this).attr('src')
+        let imgelement = $('<img id="imgs" style="position:fixed;width:auto;height:85vh;object-fit:cover;">').attr('src', src)
+        let cimg = $('<div id="contvp" style="position:fixed;width:100%;height:100%;display:flex;align-items:center;justify-content:center;top:0;background: rgba(0, 0, 0, 0.8);">')
+        cimg.append(imgelement)
+        html.css('overflow', 'hidden')
+        $('html').append(cimg)
+    })
+    $('#postphoto').on('change', function () {
+        $('.preview').empty()
+        let photos = this.files
+
+        $.each(photos, function (index, file) {
+            let FileR = new FileReader()
+
+            FileR.onload = function (event) {
+                const span = $('<span>').attr('style', 'height: 100px ;padding-left: 4px;cursor: pointer;')
+
+                if (event.target.result.startsWith('data:video')) {
+
+                    let imgelment = $(`<video controls><source src='${event.target.result}' ></video>`)
+
+                    imgelment.attr('style', 'width:12% !important;')
+
+                    span.append(imgelment)
+                    $('.preview').append(span)
+                } else {
+                    let imgelment = $('<img>').attr('src', event.target.result)
+
+                    imgelment.attr('style', 'height: 100px;padding-left: 4px;cursor: pointer;')
+                    const deletebutton = $('<img type="button" src="/del.ico">').attr('style', 'position: relative;bottom: 78%;left: 24px;height: 16px;')
+                    span.append(deletebutton)
+                    span.append(imgelment)
+                    $('.preview').append(span)
+                }
+
+
+            }
+            FileR.readAsDataURL(file)
+
+        })
+    })
+
+    $(document).on('click', '.usern', function () {
+        event.stopPropagation()
+        let id = $(this).parent().data('user')
+        window.location.href = `/user/${id}`
+    })
+
+
+    $(document).on('click', '.addfriend', function (event) {
+
+        event.preventDefault()
+
+        $('.fixeduser').addClass('visible')
+
+        $('.fixeduser').html(
+            `
+        <% if(typeof pendingwithname !== 'undefined' && pendingwithname.toString() !== ''){%>
+
+            <% pendingwithname.forEach(function(pendingit){ %>
+                
+                <span data-user='<%-pendingit.userid%>'><p class="username" style='font-size:unset;'><%-pendingit.username%></p><p class="acc2" id="rejacc" style="
+                                         position: relative;
+                                        top: 0;
+                                        ">Accept</p>
+                                        <p class="rej2" id="rejacc" style="
+                                        position: relative;
+                                        top: 0;
+                                        ">Reject</p><p></p></span>
+            <% }) %>
+        <%}else{%>
+            
+            <p style='text-align: center;position: relative;top: 50%;margin: 0;letter-spacing:4px;'>No Requests Yet </p>
+        <%}%>
+        `
+
+
+        )
+
+
+    })
+    $(document).on('click', '.adduser', async function (event) {
+        var useradded = $(this).parent().data('user')
+        var useradder = '<%=userid%>'
+
+
+        $(this).text('Sent Request')
+        await fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ useradded: useradded, useradder: useradder }) })
+        
+    })
+
+    $('.search').on('input', async function (event) {
+
+
+
+        $('.fixeduser').removeClass('visible')
+
+        event.preventDefault()
+        var searchbtn = document.getElementById('searchbtn')
+        $('#fixedmenu')[0].innerHTML = '<p style="letter-spacing: 2px;font-family: sans-serif;position: relative;top: 50%;height: 30px;width: 115px;margin-left: 36%;">Loading ...</p>'
+
+        $('#fixedmenu').addClass('visible')
+
+        var searchbarval = $('.search').val()
+
+        await fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ searchitem: searchbarval }) })
+            .then(response => response.json())
+            .then(data => {
+                if (data.searchitem == $('.search').val()) {
+
+                    $('#fixedmenu').html('')
+
+                    data.datasearch.forEach(element => {
+                        var username = '<%=username%>'
+
+
+                        if (username == element.username) {
+                            var ele = `
+            
+            <div class="post2" data-id="${element._id}" id='post'>
+                    <span class="cont2">
+                        <p class="username2" data-user='${element.userid}'><img class="miniuserico"
+                                style="height: 18px;margin-right: 12px;">${element.username}
+                    
+
+                    
+                            </p>
+                            <span>
+                                <img src="/del.ico" class="del" id="del1">
+                                <img src="/edit.ico" class="edit" id="edit1">
+                            </span>
+                    </span>
+
+                <p class="posttext2">${element.post.replaceAll('\n', '<br>')}</p>
+
+                <p class="likes2">${element.likes}
+                    <img src="/like.ico" class="like2">
+            </div>
+            
+        `
+
+                        } else {
+                            var ele = `
+            
+            <div class="post2" data-id="${element._id}" id='post'>
+                    <span class="cont2">
+                        <p class="username2" data-user='${element.userid}'><img class='miniuserico'>${element.username}</p>
+
+                    </span>
+
+                <p class="posttext2">${element.post.replaceAll('\n', '<br>')}</p>
+
+                <p class="likes2">${element.likes}<img src="/like.ico" class="like2"></p>
+            </div>
+            
+        `
+                        }
+
+                        $(ele).appendTo('#fixedmenu')
+
+                        let photoresult = JSON.parse(JSON.stringify(data.photosresult))
+
+                        let index = 0
+                        for (let value of photoresult) {
+
+                            if (typeof value.photoext !== 'undefined') {
+                                $('.post2').find('[data-user=' + value.id + ']').find('.miniuserico').attr('src', `/usersphoto/${value.id}.${value.photoext}`)
+
+                            } else {
+                                $('.post2').find('[data-user=' + value.id + ']').find('.miniuserico').attr('src', `/usersphoto/deflt.png`)
+
+                            }
+                            index++
+                        }
+                        if (element.wholike.indexOf(element.userid) >= 0) {
+
+                            $('.post2').find('[data-user=' + element.userid + ']').closest('.post2').find('.like2').attr('src', '/likepressed.ico')
+                        }
+                    });
+                }
+
+
+            })
+
+    })
+
+    $(document).on('click', async function (event) {
+        event.stopPropagation()
+
+
+
+        let menu = document.getElementById('menu')
+
+        let clicker = document.getElementById('showpostinp')
+
+        let imgs = document.getElementById('imgs')
+        let contvp = document.getElementById('contvp')
+        let fixeduser = document.getElementById('fixeduser')
+        let fixedmenu = document.getElementById('fixedmenu')
+        let container = document.getElementById('container2')
+        let addfriend = document.getElementById('addfriend')
+        let imga = document.getElementById('imga')
+        let html = $('html')
+
+        if (!fixedmenu.contains(event.target) && !event.target.closest('.post2')) {
+            $('#fixedmenu').removeClass('visible')
+            $('#fixedmenu').html('')
+
+        }
+        if (!fixeduser.contains(event.target) && !addfriend.contains(event.target)) {
+            $('#fixeduser').removeClass('visible')
+
+        }
+
+        if (event.target !== imgs && event.target !== imga) {
+            contvp.remove()
+            html.css('overflow', 'auto')
+        }
+
+
+    })
+    $(document).on('click', function (event) {
+
+        let menu = document.getElementById('menu')
+        let fixedcomments = $('.fixedcomments')[0]
+        let redire = $('#redire')[0]
+        let clicker = document.getElementById('showpostinp')
+
+        if (event.target !== clicker && !menu.contains(event.target)) {
+
+            document.getElementById('do').style.display = 'none'
+        }
+        if (event.target !== redire && event.target == fixedcomments) {
+            fixedcomments.remove()
+        }
+    })
+    $('.searchbtn').on('click', function (event) {
+
+        let text = $('.search').val()
+        window.location.href = `/search/${text}`
+
+
+    })
+
+    $('.submit').click(function (event) {
+        event.preventDefault();
+        $('#fixedmenu').removeClass('visible')
+        var email = '<%- email %>';
+        var userid = '<%-userid%>'
+        var thepost = $('#poster').val();
+        let photos = $('#postphoto')[0].files ? $('#postphoto')[0].files : null
+
+        let formphoto = new FormData()
+        for (let photo in photos) {
+            formphoto.append('photos', photos[photo])
+        }
+        formphoto.append('photos', photos)
+        formphoto.append('post', thepost)
+        formphoto.append('email', email)
+        formphoto.append('userid', userid)
+
+
+        fetch('/', {
+            method: 'POST',
+
+            body: formphoto
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+
+                    var container = document.querySelector('.container');
+                    var newDiv = document.createElement('div');
+                    newDiv.id = 'post';
+                    newDiv.className = 'post'
+                    newDiv.setAttribute('data-id', data.insertedId);
+
+                    newDiv.innerHTML = `
+                <span class="cont">
+                    <p class="username" data-user="${data.userid}"><img class="userico" style="width: 40px;height: 40px;margin-right: 12px;border-radius: 50%;object-fit: cover;padding: 0px;position: relative;/* top: 10px; */" src="/usersphoto/<%=adminphoto ? userid+'.'+adminphoto : 'deflt.png'%>">${data.username}(You)</p>
+                    <span>
+                        <img src="/del.ico" class="del" id="del">
+                        <img src="/edit.ico" class="edit" id="edit">
+                    </span>
+                </span>
+               
+                    <p class="posttext">${data.post.replaceAll('\n', '<br>')}</p>
+                    <div class='contphoto'></div>
+                    <hr>
+                    <span class="likes"><p class="likec">0<img src="/like.ico" class="like"></p><p class="commer">0<img src=".comment.ico" id="redire" class="commentor"></p></span>`;
+
+                    container.appendChild(newDiv);
+                    $('#poster').val(''); // Clear the input field
+                    $('#do').css('display', 'none')
+                    data.photos.forEach(function (value) {
+
+                        if (['mp4', 'mkv', 'ogg', 'webm'].includes(value.split('.').pop())) {
+
+                            $('.contphoto')[$('.contphoto').length - 1].innerHTML = `${$('.contphoto')[$('.contphoto').length - 1].innerHTML}<video width=400 controls><source src="/posts/${value}" class="imgposts" id="imga"></video>`
+                        } else {
+
+                            $('.contphoto')[$('.contphoto').length - 1].innerHTML = `${$('.contphoto')[$('.contphoto').length - 1].innerHTML}<img src="/posts/${value}" class="imgposts" id="imga">`
+                        }
+                    })
+                } else {
+                    console.error('Failed to add post:', data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Failed operation:', error);
+            });
+    });
+
+    $(document).on('click', '#del', async function (event) {
+        $('#fixedmenu').removeClass('visible')
+        event.stopPropagation();
+        event.preventDefault();
+        var postElement = $(this).closest('.post');
+        var postId = postElement.data('id');
+
+        var posting = await fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ deleted: postId }) })
+
+        postElement.remove()
+
+    });
+    $(document).on('click', '#del1', async function (event) {
+        event.stopPropagation();
+        event.preventDefault();
+        var postElement = $(this).closest('.post2');
+
+        var postId = postElement.data('id');
+        var postElement1 = $('[data-id=' + postId + ']')
+
+        var posting = await fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ deleted: postId }) })
+
+        postElement.remove()
+        postElement1.remove()
+
+    });
+    var isclicked = false
+    $(document).on('click', '.like', async function (event) {
+        $('#fixedmenu').removeClass('visible')
+        event.stopPropagation()
+        event.preventDefault()
+        var postElement = $(this).closest('.post')
+        var email = '<%= email %>';
+        var id = postElement.data('id')
+
+        var postit = await fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ likeplus: id, email: email }) })
+            .then(response => response.json())
+            .then(data => {
+
+                var appendnew = $(this).closest('.likes').find('.likec')
+                var likes = parseInt($(this).closest('.likes').find('.likec').text(), 10)
+                if (data.addone == true) {
+
+                    $(this).closest('.likes').find('.likec').text(likes + 1)
+                    $('<img>', { src: "/likepressed.ico", class: 'like' }).appendTo(appendnew);
+
+                } else {
+                    $(this).closest('.likes').find('.likec').text(likes - 1)
+                    $('<img>', { src: "/like.ico", class: 'like' }).appendTo(appendnew);
+                }
+            })
+
+
+
+
+    })
+    //the tiny version
+    $(document).on('click', '.like2', async function (event) {
+        event.stopPropagation()
+        event.preventDefault()
+        var postElement = $(this).closest('.post2')
+        var email = '<%= email %>';
+        var id = postElement.data('id')
+
+        var postit = await fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ likeplus: id, email: email }) })
+            .then(response => response.json())
+            .then(data => {
+
+                var appendnew = $(this).closest('.likes2')
+                var getid = $(this).closest('.post2').data('id')
+                var inindex = $('.container').find('[data-id=' + getid + ']').find('.likes')
+                var itsparse = parseInt(inindex.text(), 10)
+
+
+                var likes = parseInt($(this).closest('.likes2').text(), 10)
+
+
+                if (data.addone == true) {
+
+                    $(this).closest('.likes2').text(likes + 1)
+                    inindex.text(itsparse + 1)
+                    $('<img>', { src: "/like.ico", class: 'like' }).appendTo(inindex);
+                    $('<img>', { src: "/like.ico", class: 'like2' }).appendTo(appendnew);
+
+                } else {
+                    $(this).closest('.likes2').text(likes - 1)
+                    inindex.text(itsparse - 1)
+                    $('<img>', { src: "/like.ico", class: 'like' }).appendTo(inindex);
+                    $('<img>', { src: "/like.ico", class: 'like2' }).appendTo(appendnew);
+                }
+            })
+
+
+
+
+    })
+    $(document).on('click', '#edit', async function (event) {
+        event.preventDefault()
+        $('#fixedmenu').removeClass('visible')
+
+        event.stopPropagation()
+        var posttext = $(this).closest('.post').find('.posttext').html()
+
+        $(this).closest('.post').find('.posttext').replaceWith(`<span id="inputing"><textarea id='textedit'>${posttext.replaceAll('<br>', '\n').trim()}</textarea><button id='cncl' class='button'>Cancel</button><button id='submit' class='button' style='margin-left:10px;margin-bottom:12px;'>Sumbit</button></span>`)
+
+
+
+    })
+
+
+
+    $(document).on('click', '#cncl', function (event) {
+        event.stopPropagation()
+        $('#fixedmenu').removeClass('visible')
+
+        var posttext = $(this).closest('.post').find('#textedit').text()
+        $(this).closest('.post').find('#inputing').replaceWith(`<p class="posttext">${posttext.replaceAll('\n', '<br>')}</p>`)
+
+    })
+
+    $(document).on('click', '#submit', async function (event) {
+        event.stopPropagation()
+
+        var nwposttext = $(this).closest('.post').find('#textedit').val()
+        var id = $(this).closest('.post').data('id')
+
+        $(this).closest('.post').find('#inputing').replaceWith(`<p class="posttext">${nwposttext.replaceAll('\n', '<br>')}</p>`)
+        var post = await fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ idnw: id, postnw: nwposttext }) })
+
+    })
+    $(document).on('click', '#edit1', async function (event) {
+        event.preventDefault()
+
+        event.stopPropagation()
+        var posttext = $(this).closest('.post2').find('.posttext2').html()
+
+        $(this).closest('.post2').find('.posttext2').replaceWith(`<span id="inputing"><textarea id='textedit2'>${posttext.replaceAll('<br>', '\n')}</textarea><button id='cncl1' class='button2'>Cancel</button><button id='submit1' class='button2' style='margin-left:10px;'>Sumbit</button></span>`)
+
+
+
+    })
+
+
+
+    $(document).on('click', '#cncl1', function (event) {
+        event.stopPropagation()
+
+        var posttext = $(this).closest('.post2').find('#textedit2').text()
+
+        $(this).closest('.post2').find('#inputing').replaceWith(`<p class="posttext2">${posttext.replaceAll('\n', '<br>')}</p>`)
+
+    })
+
+    $(document).on('click', '#submit1', async function (event) {
+        event.stopPropagation()
+
+        var nwposttext = $(this).closest('.post2').find('#textedit').val()
+        var id = $(this).closest('.post2').data('id')
+
+        $('.post').closest('[data-id=' + id + ']').find('.posttext').html(nwposttext.replaceAll('\n', '<br>'))
+
+
+        $(this).closest('.post2').find('#inputing').replaceWith(`<p class="posttext2">${nwposttext.replaceAll('\n', '<br>')}</p>`)
+        var post = await fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ idnw: id, postnw: nwposttext }) })
+
+    })
+    $(document).on('click', '.rej', async function (event) {
+        event.preventDefault()
+        let userid = $(this).parent().data('user')
+
+        $(this).css('display','none')
+        $('.acc').remove()
+        $(this).closest('.username')[0].innerHTML += `<p class='adduser'>Add Friend</p>`
+        $(this).remove()
+        await fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username: userid, getRemoveFrom: 1 }) })
+
+    })
+    $(document).on('click', '.acc', async function (event) {
+        event.preventDefault()
+        let userid = $(this).parent().data('user')
+        console.log(userid)
+        $('.rej').remove()
+        $(this).css('display','none')
+        $(this).closest('.username')[0].innerHTML += `<p class='adduser'>Friends</p>`
+        $(this).remove()
+
+        await fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username: userid, getacc: 1 }) })
+    })
+    $(document).on('click', '.acc2', async function (event) {
+        event.preventDefault()
+        event.stopPropagation()
+        let userid = $(this).parent().data('user')
+        console.log(userid)
+        console.log($(this).parent())
+        $(this).closest(`[data-user=${userid}]`).remove()
+        if($('.acc2').length == 0){
+            $('#fixeduser').append(`<p style='text-align: center;position: relative;top: 50%;margin: 0;letter-spacing:4px;'>No Requests Yet </p>`)
+        }
+
+        await fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username: userid, getacc: 1 }) })
+    })
+    $(document).on('click', '.rej2', async function (event) {
+        event.preventDefault()
+        event.stopPropagation()
+        let userid = $(this).parent().data('user')
+        console.log(userid);
+        $(this).parent().remove()
+        await fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username: userid, getRemoveFrom: 1 }) })
+
+    })
+
+
+</script>
+
+</html>

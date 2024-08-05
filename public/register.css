@@ -1,0 +1,104 @@
+body,html{
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    background: url(./sp.jpg);
+    background-size: cover;
+}
+#centered{
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+}
+#container{
+    height: 400px;
+    width: 380px;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: black 1px 0px 5px;
+}
+form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    top: 16px;
+}
+h1{
+    font-family: sans-serif;
+    margin: 0;
+    font-size: 24px;
+    padding: 0;
+    position: relative;
+    top: 10px;
+    color: black;
+}
+.userlogin{
+    height: 95px;
+    position: relative;
+    top: 16px;
+}
+.email,.username,.password{
+    border: 0;
+    font-family: sans-serif;
+    padding-left: 34px;
+    letter-spacing: 1px;
+    border-bottom: 1px solid black;
+    width: 340px;
+    height: 33px;
+    outline: none;
+    margin-top: 10px;
+    background-color: transparent !important;
+}
+.email{
+    background: white url(./email.ico) 8px 7px no-repeat;
+    background-size: 20px;
+    position: relative;
+    top: 4px;
+}
+.username{
+    background: url(./userinput.ico) 8px 7px no-repeat;
+    background-size: 20px;
+}
+.password{
+    background: white url(./lockuser.ico) 8px 7px no-repeat;
+    background-size: 20px;
+    position: relative;
+    top: 12px;
+}
+.submit{
+    width: 100px;
+    height: 40px;
+    margin-top: 10px;
+    align-self: center;
+    border: 0;
+    background-color: black;
+    color: white;
+    letter-spacing: 4px;
+    cursor: pointer;
+    border-radius: 5px;
+    position: relative;
+    top: 50px;
+    font-family: sans-serif;
+}
+a{
+    font-family: sans-serif;
+    font-size: 15px;
+    text-decoration: none;
+    color: white;
+    margin-top: 20px;
+    font-weight: bolder;
+}
+a:hover{
+    text-decoration: underline;
+}
+@media screen and (max-width:500px) {
+    .centered{
+        scale: .8;
+    }
+}

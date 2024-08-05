@@ -1,0 +1,1291 @@
+body,
+html {
+    padding: 0;
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f2f5;
+}
+.action{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+    background-color: rgba(0,0,0,.6);
+}
+.addfriend {
+    height: 20px;
+    position: relative;
+    top: 10px;
+    left: -24px;
+}
+
+.adduseranduser {
+    display: flex;
+
+}
+
+.adduseranduser .adduser {
+
+    margin-left: 20px;
+
+    position: relative;
+
+    font-size: 16px;
+
+    top:0px;
+}
+
+
+#fixedbar {
+    position: fixed;
+    width: 100%;
+    background-color: #fff;
+    z-index: 1000;
+    top: 0;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 10px 20px;
+    justify-content: space-between;
+}
+
+#fixedbar h1 {
+    margin: 0;
+    font-size: 1.5em;
+    color: #333;
+    display: flex;
+    height: 10px;
+    align-items: center;
+}
+
+.search {
+    height: 30px;
+    outline: 0;
+    border: 1px solid #ccc;
+    padding: 5px 10px;
+    margin-left: auto;
+    border-radius: 4px;
+    width: 250px;
+    margin-right: 75px;
+}
+
+.addnew {
+    display: flex;
+    /* justify-content: center; */
+    margin: 60px 0 20px 0;
+    padding: 0 20px;
+    flex-direction: column;
+    /* text-align: center; */
+    padding: 0;
+    margin: 0;
+}
+
+.span {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.postinp {
+    width: 20em;
+    height: 40vh;
+    outline: 0;
+    padding: 10px 10px;
+    border: 0;
+    resize: none;
+    overflow: hidden;
+    display: flex;
+    font-family: sans-serif;
+    font-size: 26px;
+}
+
+img {
+    height: 24px;
+    padding-left: 4px;
+    cursor: pointer;
+}
+
+.cont {
+    display: flex;
+    position: relative;
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-between;
+}
+
+form {
+    width: 100%;
+    display: flex;
+    position: relative;
+    height: 40vh;
+    top: 10px;
+    padding: 0;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    margin: 0;
+}
+
+.submit {
+    border: none;
+    height: 40px;
+    padding: 0 18px;
+    color: white;
+    cursor: pointer;
+    font-size: 20px;
+    width: 96%;
+    margin: 0;
+    border-radius: 10px;
+    background-color: #0866ff;
+    margin-bottom: 10px;
+}
+
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0 20px;
+    position: relative;
+}
+
+.post {
+    display: flex;
+    width: 100%;
+    max-width: 600px;
+    flex-direction: column;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+    margin-bottom: 20px;
+    padding: 15px;
+    border-radius: 0px;
+    justify-content: space-between;
+}
+
+.post2 {
+    display: flex;
+    width: 90%;
+    flex-direction: column;
+    max-height: 300px !important;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: -15px;
+    padding: 15px;
+    border-radius: 0;
+    margin-bottom: 16px;
+}
+
+.username2 {
+    font-size: 12px !important;
+    cursor: pointer;
+}
+
+.username2:hover {
+    text-decoration: underline;
+}
+
+.posttext2 {
+    font-size: 12px !important;
+}
+
+.likes2 {
+    font-size: 12px !important;
+}
+
+.container2 {
+    display: flex;
+    flex-direction: column;
+    padding: 0 20px;
+    top: 20px;
+    align-items: center;
+    position: relative;
+}
+
+.cont2 {
+    display: flex;
+    position: relative;
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-between;
+
+}
+
+.like2 {
+    height: 17px;
+    position: relative;
+    top: 4px;
+    left: -3px;
+}
+
+.cont2 span {
+    width: 55px;
+}
+
+.cont2 span img {
+    height: 10px;
+}
+
+#textedit {
+    width: 100%;
+    resize: none;
+    font-family: sans-serif;
+    border: 0;
+    outline: 0;
+    box-sizing: border-box;
+    box-shadow: black 0px 0px 2px;
+    padding: 10px 5px;
+}
+
+#textedit2 {
+    width: 100%;
+    resize: none;
+    height: 34px;
+    font-family: sans-serif;
+    border: 0;
+    outline: 0;
+    box-sizing: border-box;
+    box-shadow: black 0px 0px 2px;
+    padding: 10px 5px;
+}
+
+.button2 {
+    position: relative;
+    top: 3px;
+    border: 0;
+    outline: 0;
+    font-size: 10px;
+    padding: 6px;
+    border-radius: 5px;
+    background: #0866ff;
+    color: white;
+    cursor: pointer;
+}
+
+.button {
+    position: relative;
+    top: 3px;
+    border: 0;
+    outline: 0;
+    padding: 8px;
+    border-radius: 5px;
+    background: #0866ff;
+    color: white;
+    cursor: pointer;
+}
+
+#cncl,
+#cncl1 {
+    background: white;
+    color: black;
+    box-shadow: black 0px 0px 2px;
+}
+
+.username {
+    font-weight: bold;
+    margin-bottom: 5px;
+    cursor: pointer;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+}
+
+
+
+#fixedmenu {
+    display: none;
+    position: fixed;
+    flex-direction: column;
+    right: 40px;
+    width: 300px;
+    top: 60px;
+    height: 450px;
+    background-color: white;
+    overflow-x: hidden;
+}
+
+#fixeduser {
+    display: none;
+    position: fixed;
+    flex-direction: column;
+    right: 20em;
+    width: 300px;
+    top: 60px;
+    height: 300px;
+    background-color: white;
+    overflow-x: hidden;
+}
+
+#fixeduser span {
+    width: 100%;
+    margin-top: 1px !important;
+    margin: 0;
+    height: 50px !important;
+    box-shadow: 0px 0px 1px black;
+    height: 18px;
+    overflow: hidden;
+
+    border-radius: 1px;
+    padding-left: 4px;
+    display: flex;
+    align-items: center;
+
+}
+
+#fixeduser span .useradder {
+    font-family: sans-serif;
+    font-size: 18px;
+}
+
+.use {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+#rejacc {
+    cursor: pointer;
+    margin-left: 10px;
+    position: relative;
+    top: 28px;
+
+}
+
+#rejacc:hover {
+    text-decoration: underline;
+}
+
+#fixeduser.visible {
+    display: flex;
+}
+
+#fixedmenu p {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    height: 18px;
+    overflow: hidden;
+    font-family: sans-serif;
+    font-size: 20px;
+}
+
+#fixedmenu.visible {
+    display: flex;
+}
+
+.searchbtn {
+    position: relative;
+    right: 40px;
+    padding: 8px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border: 0;
+    background-color: #0866ff;
+    color: white;
+    border-radius: 4px;
+    outline: 0;
+    cursor: pointer;
+
+}
+
+.posttext {
+    font-size: 32px;
+    margin-bottom: 35px;
+}
+
+.miniuserico {
+    object-fit: cover;
+    height: 15px !important;
+    border-radius: 50%;
+    padding: 0;
+    margin-right: 6px !important;
+    width: 15px;
+}
+.contphoto{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.imgposts{height: auto;object-fit: cover; /* 50% of the width minus some margin */margin: 5px;max-width: calc(50% - 10px); /* Ensuring images don't grow larger than 50% */box-sizing: border-box;}
+
+.likes {
+    display: flex;
+    align-items: center;
+    font-size: 24px;
+    color: #666;
+    justify-content: space-between;
+    padding: 0;
+    position: relative;
+    top: 38px;
+}
+video{
+    width: 100%;
+    outline: 0;
+}
+.like {
+    height: 37px;
+    margin-left: 5px;
+    cursor: pointer;
+    position: relative;
+    bottom: -8px;
+}
+.menu{
+    background-color: white;
+    padding-top: 10px;
+    border-radius: 8px;
+
+}
+@media (min-width:400px) and (max-width:505px) {
+
+    .search {
+        width: 98px !important;
+    }
+
+}
+
+@media screen and (max-width: 768px) {
+    .postinp {
+        width: 60%;
+    }
+
+    .submit {
+        padding: 0 10px;
+        align-self: center;
+        top: 13px;
+    }
+
+    .postinp {
+        min-width: 44vh;
+        margin: 0;
+    }
+
+    #fixedbar h1 {
+        font-size: 16px;
+        margin-right: 12px;
+    }
+    .therst{
+        display: flex;
+    }
+    .span {
+        position: relative;
+        flex-direction: column;
+        align-items: center;
+        top: 22px;
+    }
+
+    .search {
+        width: 205px;
+    }
+
+    .container {
+        top: -30px;
+    }
+
+    .submit {
+        top: 26px;
+    }
+
+
+}
+
+@media screen and (max-width:400px) {
+    #fixedbar h1 {
+        font-size: 14px;
+        white-space: nowrap;
+    }
+
+    .posttext {
+        font-size: 24px;
+    }
+
+    img {
+        height: 20px;
+    }
+    .therst{
+        display: flex;
+    }
+    .addfriend {
+        height: 20px;
+        position: relative;
+        top: 9px;
+        left: -14px;
+    }
+    #fixedbar{
+        padding: 10px 10px;
+    }
+
+
+    .search {
+        width: 42px;
+    }
+
+
+
+    .likes {
+        font-size: 20px;
+
+    }
+
+    .like {
+        height: 30px;
+        bottom: 0;
+    }
+
+
+
+    .post {
+        position: relative;
+        width: 33vh;
+    }
+
+    .postinp {
+        min-width: 37vh !important;
+        font-size: 18px;
+        top: 25px;
+    }
+
+    .container {
+        position: relative;
+        top: 28px;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+    }
+    .searchbtn {
+        position: relative;
+        right: 68px;
+        padding: 8px;
+        padding-left: 10px;
+        padding-right: 10px;
+        border: 0;
+        background-color: #0866ff;
+        color: white;
+        border-radius: 4px;
+        outline: 0;
+        cursor: pointer;
+    }
+    #fixeduser{
+        left: 6vh;
+    }
+
+    .span {
+        position: relative;
+        flex-direction: column;
+        align-items: center;
+        top: 22px;
+    }
+    #addphoto{
+        align-self: center !important;
+        left: 0 !important;
+        top: 24px !important;
+    }
+}
+@media (min-width:401px) and (max-width:580px){
+    #fixedbar h1 p{
+        text-wrap: nowrap;
+    }
+    .addfriend {
+        height: 20px;
+        position: relative;
+        top: 10px;
+        left: -12px;
+    }
+    #addphoto{
+        align-self: center !important;
+        left: 0 !important;
+        top: 24px !important;
+    }
+    .searchbtn{
+        right: 60px;
+    }
+    #fixeduser{
+        left: 12vh;
+    }
+    .span {
+        position: relative;
+        flex-direction: column;
+        align-items: center;
+        top: 22px;
+    }
+}
+.post hr {
+    width: 100%;
+    position: relative;
+    top: 90px;
+}
+.commentor{
+    margin-left: 10px;
+}
+.commer{
+    position: relative;
+    top: 10px;
+    display: flex;
+}
+@media screen and (max-width:1024px) {
+    .span {
+        position: relative;
+        flex-direction: column;
+        align-items: center;
+        top: 22px;
+    }
+    #addphoto{
+        align-self: center !important;
+        left: 0 !important;
+        top: 24px !important;
+    }
+    .submit {
+        padding: 0 10px;
+        align-self: center;
+        top: 30px;
+    }
+}body,
+html {
+    padding: 0;
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f2f5;
+}
+.action{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+    background-color: rgba(0,0,0,.6);
+}
+.addfriend {
+    height: 20px;
+    position: relative;
+    top: 6px;
+    left: -24px;
+}
+
+.adduseranduser {
+    display: flex;
+
+}
+
+.adduseranduser .adduser {
+
+    margin-left: 20px;
+
+    position: relative;
+
+    font-size: 16px;
+
+    top:0px;
+}
+
+.adduser:hover {
+    text-decoration: underline;
+}
+
+#fixedbar {
+    position: fixed;
+    width: 100%;
+    background-color: #fff;
+    z-index: 1000;
+    top: 0;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 10px 20px;
+    justify-content: space-between;
+}
+
+#fixedbar h1 {
+    margin: 0;
+    font-size: 1.5em;
+    color: #333;
+    display: flex;
+    height: 10px;
+    align-items: center;
+}
+
+.search {
+    height: 30px;
+    outline: 0;
+    border: 1px solid #ccc;
+    padding: 5px 10px;
+    margin-left: auto;
+    border-radius: 4px;
+    width: 250px;
+    margin-right: 75px;
+}
+
+.addnew {
+    display: flex;
+    /* justify-content: center; */
+    margin: 60px 0 20px 0;
+    padding: 0 20px;
+    flex-direction: column;
+    /* text-align: center; */
+    padding: 0;
+    margin: 0;
+}
+
+.span {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.postinp {
+    width: 20em;
+    height: 40vh;
+    outline: 0;
+    padding: 10px 10px;
+    border: 0;
+    resize: none;
+    overflow: hidden;
+    display: flex;
+    font-family: sans-serif;
+    font-size: 26px;
+}
+
+img {
+    height: 24px;
+    padding-left: 4px;
+    cursor: pointer;
+}
+
+.cont {
+    display: flex;
+    position: relative;
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-between;
+}
+
+form {
+    width: 100%;
+    display: flex;
+    position: relative;
+    height: 40vh;
+    top: 10px;
+    padding: 0;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    margin: 0;
+}
+
+.submit {
+    border: none;
+    height: 40px;
+    padding: 0 18px;
+    color: white;
+    cursor: pointer;
+    font-size: 20px;
+    width: 96%;
+    margin: 0;
+    border-radius: 10px;
+    background-color: #0866ff;
+    margin-bottom: 10px;
+}
+
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0 20px;
+    position: relative;
+    margin-top: 12vh;
+}
+
+.post {
+    display: flex;
+    width: 100%;
+    max-width: 600px;
+    flex-direction: column;
+    background-color: #fff;
+    box-shadow: 0 0px 1px rgba(0, 0, 0, 0.6);
+    margin-bottom: 20px;
+    padding: 15px;
+    border-radius: 4px;
+    justify-content: space-between;
+}
+
+.post2 {
+    display: flex;
+    width: 90%;
+    flex-direction: column;
+    max-height: 300px !important;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: -15px;
+    padding: 15px;
+    border-radius: 0;
+    margin-bottom: 16px;
+}
+
+.username2 {
+    font-size: 12px !important;
+    cursor: pointer;
+}
+
+.username2:hover {
+    text-decoration: underline;
+}
+
+.posttext2 {
+    font-size: 12px !important;
+}
+
+.likes2 {
+    font-size: 12px !important;
+}
+
+.container2 {
+    display: flex;
+    flex-direction: column;
+    padding: 0 20px;
+    top: 20px;
+    align-items: center;
+    position: relative;
+}
+
+.cont2 {
+    display: flex;
+    position: relative;
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-between;
+
+}
+
+.like2 {
+    height: 17px;
+    position: relative;
+    top: 4px;
+    left: -3px;
+}
+
+.cont2 span {
+    width: 55px;
+}
+
+.cont2 span img {
+    height: 10px;
+}
+
+#textedit {
+    width: 100%;
+    resize: none;
+    font-family: sans-serif;
+    border: 0;
+    outline: 0;
+    box-sizing: border-box;
+    box-shadow: black 0px 0px 2px;
+    padding: 10px 5px;
+}
+
+#textedit2 {
+    width: 100%;
+    resize: none;
+    height: 34px;
+    font-family: sans-serif;
+    border: 0;
+    outline: 0;
+    box-sizing: border-box;
+    box-shadow: black 0px 0px 2px;
+    padding: 10px 5px;
+}
+
+.button2 {
+    position: relative;
+    top: 3px;
+    border: 0;
+    outline: 0;
+    font-size: 10px;
+    padding: 6px;
+    border-radius: 5px;
+    background: #0866ff;
+    color: white;
+    cursor: pointer;
+}
+
+.button {
+    position: relative;
+    top: 3px;
+    border: 0;
+    outline: 0;
+    padding: 8px;
+    border-radius: 5px;
+    background: #0866ff;
+    color: white;
+    cursor: pointer;
+}
+
+#cncl,
+#cncl1 {
+    background: white;
+    color: black;
+    box-shadow: black 0px 0px 2px;
+}
+
+.username {
+    font-weight: bold;
+    margin-bottom: 5px;
+    cursor: pointer;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+}
+
+
+
+#fixedmenu {
+    display: none;
+    position: fixed;
+    flex-direction: column;
+    right: 40px;
+    width: 300px;
+    top: 60px;
+    height: 450px;
+    background-color: white;
+    overflow-x: hidden;
+}
+
+#fixeduser {
+    display: none;
+    position: fixed;
+    flex-direction: column;
+    right: 20em;
+    width: 300px;
+    top: 60px;
+    height: 300px;
+    background-color: white;
+    overflow-x: hidden;
+}
+
+#fixeduser span {
+    width: 100%;
+    margin-top: 1px !important;
+    margin: 0;
+    height: 50px !important;
+    box-shadow: 0px 0px 1px black;
+    height: 18px;
+    overflow: hidden;
+
+    border-radius: 1px;
+    padding-left: 4px;
+    display: flex;
+    align-items: center;
+
+}
+
+#fixeduser span .useradder {
+    font-family: sans-serif;
+    font-size: 18px;
+}
+
+.use {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+#rejacc {
+    cursor: pointer;
+    margin-left: 10px;
+    position: relative;
+    top: 28px;
+
+}
+
+#rejacc:hover {
+    text-decoration: underline;
+}
+
+#fixeduser.visible {
+    display: flex;
+}
+
+#fixedmenu p {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    height: 18px;
+    overflow: hidden;
+    font-family: sans-serif;
+    font-size: 20px;
+}
+
+#fixedmenu.visible {
+    display: flex;
+}
+
+.searchbtn {
+    position: relative;
+    right: 40px;
+    padding: 8px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border: 0;
+    background-color: #0866ff;
+    color: white;
+    border-radius: 4px;
+    outline: 0;
+    cursor: pointer;
+
+}
+
+.posttext {
+    font-size: 32px;
+    margin-bottom: 35px;
+}
+
+.miniuserico {
+    object-fit: cover;
+    height: 15px !important;
+    border-radius: 50%;
+    padding: 0;
+    margin-right: 6px !important;
+    width: 15px;
+}
+.contphoto{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.imgposts{height: auto;object-fit: cover; /* 50% of the width minus some margin */margin: 5px;max-width: calc(50% - 10px); /* Ensuring images don't grow larger than 50% */box-sizing: border-box;}
+
+.likes {
+    display: flex;
+    align-items: center;
+    font-size: 24px;
+    color: #666;
+    justify-content: space-between;
+    padding: 0;
+    position: relative;
+    top: 20px;
+}
+video{
+    width: 100%;
+    outline: 0;
+}
+.like {
+    height: 37px;
+    margin-left: 5px;
+    cursor: pointer;
+    position: relative;
+    bottom: -8px;
+}
+
+@media (min-width:400px) and (max-width:505px) {
+
+    .search {
+        width: 98px !important;
+    }
+
+}
+
+@media screen and (max-width: 768px) {
+    .postinp {
+        width: 60%;
+    }
+
+    .submit {
+        padding: 0 10px;
+        align-self: center;
+        top: 13px;
+    }
+
+    .postinp {
+        min-width: 44vh;
+        margin: 0;
+    }
+
+    #fixedbar h1 {
+        font-size: 16px;
+        margin-right: 12px;
+    }
+    .therst{
+        display: flex;
+    }
+    .span {
+        position: relative;
+        flex-direction: column;
+        align-items: center;
+        top: 22px;
+    }
+
+    .search {
+        width: 205px;
+    }
+
+    .container {
+        top: -30px;
+    }
+
+    .submit {
+        top: 26px;
+    }
+
+
+}
+
+@media screen and (max-width:400px) {
+    #fixedbar h1 {
+        font-size: 14px;
+        white-space: nowrap;
+    }
+
+    .posttext {
+        font-size: 24px;
+    }
+
+    img {
+        height: 20px;
+    }
+    .therst{
+        display: flex;
+    }
+    .addfriend {
+        height: 20px;
+        position: relative;
+        top: 9px;
+        left: -14px;
+    }
+    #fixedbar{
+        padding: 10px 10px;
+    }
+
+
+    .search {
+        width: 42px;
+    }
+
+
+
+    .likes {
+        font-size: 20px;
+
+    }
+
+    .like {
+        height: 30px;
+        bottom: 0;
+    }
+
+
+
+    .post {
+        position: relative;
+        width: 33vh;
+    }
+
+    .postinp {
+        min-width: 37vh !important;
+        font-size: 18px;
+        top: 25px;
+    }
+
+    .container {
+        position: relative;
+        top: 28px;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+    }
+    .searchbtn {
+        position: relative;
+        right: 68px;
+        padding: 8px;
+        padding-left: 10px;
+        padding-right: 10px;
+        border: 0;
+        background-color: #0866ff;
+        color: white;
+        border-radius: 4px;
+        outline: 0;
+        cursor: pointer;
+    }
+    #fixeduser{
+        left: 6vh;
+    }
+
+    .span {
+        position: relative;
+        flex-direction: column;
+        align-items: center;
+        top: 22px;
+    }
+    #addphoto{
+        align-self: center !important;
+        left: 0 !important;
+        top: 24px !important;
+    }
+}
+@media (min-width:401px) and (max-width:580px){
+    #fixedbar h1 p{
+        text-wrap: nowrap;
+    }
+    .addfriend {
+        height: 20px;
+        position: relative;
+        top: 10px;
+        left: -12px;
+    }
+    #addphoto{
+        align-self: center !important;
+        left: 0 !important;
+        top: 24px !important;
+    }
+    .searchbtn{
+        right: 60px;
+    }
+    #fixeduser{
+        left: 12vh;
+    }
+    .span {
+        position: relative;
+        flex-direction: column;
+        align-items: center;
+        top: 22px;
+    }
+}
+.post hr {
+    width: 100%;
+    position: relative;
+    top: 52px;
+}
+.commentor{
+    margin-left: 10px;
+}
+.commer{
+    position: relative;
+    top: 10px;
+    display: flex;
+}
+.tbtn{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+@media screen and (max-width:1024px) {
+    .span {
+        position: relative;
+        flex-direction: column;
+        align-items: center;
+        top: 22px;
+    }
+    #addphoto{
+        align-self: center !important;
+        left: 0 !important;
+        top: 24px !important;
+    }
+    .submit {
+        padding: 0 10px;
+        align-self: center;
+        top: 30px;
+    }
+}
+.userico{
+    width: 40px;
+    height: 40px !important;
+    margin-right: 12px !important;
+    border-radius: 50%;
+    object-fit: cover;
+    padding: 0px;
+}
